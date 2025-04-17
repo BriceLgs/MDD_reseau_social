@@ -1,0 +1,40 @@
+<nav class="navbar">
+  <img class="logo" src="assets/logo_p6.png" alt="MDD Logo">
+  <div class="nav-links">
+    <a routerLink="/articles" class="nav-link active">Articles</a>
+    <a routerLink="/themes" class="nav-link">Thèmes</a>
+  </div>
+  <button mat-button (click)="logout()" class="logout-btn">Se déconnecter</button>
+  <button mat-icon-button class="profile-btn">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+</nav>
+
+<div class="container">
+  <div class="header">
+    <button mat-raised-button color="primary" class="create-article-btn" routerLink="/create-article">
+      Créer un article
+    </button>
+    <div class="sort-container">
+      <span>Trier par</span>
+      <button mat-icon-button (click)="toggleSort()">
+        <mat-icon>arrow_downward</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="articles-grid">
+    <mat-card class="article-card" *ngFor="let article of articles">
+      <mat-card-header>
+        <mat-card-title>{{ article.title }}</mat-card-title>
+        <mat-card-subtitle>
+          <span class="date">{{ article.date | date:'dd/MM/yyyy' }}</span>
+          <span class="author">{{ article.author }}</span>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ article.content }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div> 
