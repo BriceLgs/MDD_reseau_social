@@ -4,26 +4,46 @@
 
 <div class="container">
   <div class="top-container">
-      <button mat-icon-button class="back-button" routerLink="/">
-          <mat-icon>arrow_back</mat-icon>
-      </button>
-      <h1>Inscription</h1>
+    <button mat-icon-button class="back-button" routerLink="/">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Inscription</h1>
   </div>
 
-  <form [formGroup]="registerForm" class="registerForm">
-      <mat-form-field class="form-field" appearance="fill">
-          <mat-label>Nom d'utilisateur</mat-label>
-          <input matInput formControlName="username" required>
-      </mat-form-field>
-      <mat-form-field class="form-field" appearance="fill">
-          <mat-label>Adresse e-mail</mat-label>
-          <input matInput formControlName="email" type="email" required>
-      </mat-form-field>
-      <mat-form-field class="form-field" appearance="fill">
-          <mat-label>Mot de passe</mat-label>
-          <input matInput formControlName="password" type="password" required>
-      </mat-form-field>
-  
-      <button mat-raised-button color="primary" type="submit">S'inscrire</button>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="registerForm">
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Nom d'utilisateur</mat-label>
+      <input matInput formControlName="username" required>
+      <mat-error *ngIf="registerForm.get('username')?.errors?.['required']">
+        Le nom d'utilisateur est requis
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Adresse e-mail</mat-label>
+      <input matInput formControlName="email" type="email" required>
+      <mat-error *ngIf="registerForm.get('email')?.errors?.['required']">
+        L'email est requis
+      </mat-error>
+      <mat-error *ngIf="registerForm.get('email')?.errors?.['email']">
+        L'email n'est pas valide
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Mot de passe</mat-label>
+      <input matInput formControlName="password" type="password" required>
+      <mat-error *ngIf="registerForm.get('password')?.errors?.['required']">
+        Le mot de passe est requis
+      </mat-error>
+    </mat-form-field>
+
+    <div *ngIf="error" class="alert alert-danger">
+      {{ error }}
+    </div>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid">
+      S'inscrire
+    </button>
   </form>
 </div>

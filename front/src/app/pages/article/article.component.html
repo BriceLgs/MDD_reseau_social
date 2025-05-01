@@ -1,0 +1,55 @@
+<nav class="navbar">
+  <img class="logo" src="assets/logo_p6.png" alt="MDD Logo">
+  <div class="nav-links">
+    <a routerLink="/articles" class="nav-link">Articles</a>
+    <a routerLink="/themes" class="nav-link">Thèmes</a>
+  </div>
+  <button mat-button (click)="logout()" class="logout-btn">Se déconnecter</button>
+  <button mat-icon-button class="profile-btn" routerLink="/me">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+</nav>
+
+<div class="container">
+  <div class="article-header">
+    <button mat-icon-button class="back-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>{{ article.title }}</h1>
+  </div>
+
+  <div class="article-meta">
+    <span class="date">{{ article.date | date:'dd/MM/yyyy' }}</span>
+    <span class="author">{{ article.author }}</span>
+    <span class="theme">{{ article.theme }}</span>
+  </div>
+
+  <div class="article-content">
+    <p>{{ article.content }}</p>
+  </div>
+
+  <div class="comments-section">
+    <h2>Commentaires</h2>
+    
+    <div class="comments-list">
+      <div class="comment" *ngFor="let comment of article.comments">
+        <div class="comment-header">
+          <span class="username">{{ comment.username }}</span>
+        </div>
+        <div class="comment-content">
+          <p>{{ comment.content }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="comment-form">
+      <mat-form-field class="comment-input" appearance="outline">
+        <mat-label>Écrivez ici votre commentaire</mat-label>
+        <textarea matInput [(ngModel)]="newComment" rows="4"></textarea>
+      </mat-form-field>
+      <button mat-icon-button color="primary" class="send-button" (click)="submitComment()" [disabled]="!newComment.trim()">
+        <mat-icon>send</mat-icon>
+      </button>
+    </div>
+  </div>
+</div> 

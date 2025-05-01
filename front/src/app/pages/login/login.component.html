@@ -1,31 +1,25 @@
-<p>login works!</p>
 <nav class="navbar">
-    <img class="logo" src="assets/logo_p6.png" alt="MDD Logo">
+  <img class="logo" src="assets/logo_p6.png" alt="MDD Logo">
 </nav>
 
 <div class="container">
+  <div class="top-container">
+      <button mat-icon-button class="back-button" routerLink="/">
+          <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>Connexion</h1>
+  </div>
 
-    <div class="top-container">
-        <button mat-icon-button class="back-button" routerLink="/">
-            <mat-icon>arrow_back</mat-icon>
-          </button>
-        <h1>Se connecter</h1>
-    </div>
-
-    <form>
-        <div class="form-colomn">
-    
-        <mat-form-field >
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="loginForm">
+      <mat-form-field class="form-field" appearance="fill">
           <mat-label>E-mail ou nom d'utilisateur</mat-label>
           <input matInput formControlName="email" type="email" required>
-        </mat-form-field>
-    
-        <mat-form-field>
+      </mat-form-field>
+      <mat-form-field class="form-field" appearance="fill">
           <mat-label>Mot de passe</mat-label>
           <input matInput formControlName="password" type="password" required>
-        </mat-form-field>
-    </div>
-    
-        <button mat-raised-button color="primary" type="submit">Se connecter</button>
-      </form>
+      </mat-form-field>
+  
+      <button mat-raised-button color="primary" type="submit">Se connecter</button>
+  </form>
 </div>
