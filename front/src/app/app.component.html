@@ -1,1 +1,29 @@
+<nav class="navbar" *ngIf="authService.isAuthenticated()">
+  <img class="logo" src="assets/logo_p6.png" alt="MDD Logo">
+  
+  <!-- Menu desktop -->
+  <div class="nav-links desktop-menu">
+    <a routerLink="/articles" routerLinkActive="active" class="nav-link">Articles</a>
+    <a routerLink="/sujets" routerLinkActive="active" class="nav-link">Sujets</a>
+    <button mat-button (click)="logout()" class="logout-btn">Se déconnecter</button>
+    <button mat-icon-button class="profile-btn" routerLink="/me">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </div>
+
+  <!-- Menu mobile -->
+  <button mat-icon-button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <div class="mobile-menu" [class.show]="isMobileMenuOpen">
+    <a routerLink="/articles" routerLinkActive="active" class="nav-link">Articles</a>
+    <a routerLink="/sujets" routerLinkActive="active" class="nav-link">Sujets</a>
+    <button mat-button (click)="logout()" class="logout-btn">Se déconnecter</button>
+    <button mat-icon-button class="profile-btn" routerLink="/me">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </div>
+</nav>
+
 <router-outlet></router-outlet>

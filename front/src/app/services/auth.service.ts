@@ -1,44 +1,48 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-
-interface AuthResponse {
-  token: string;
-}
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3001/api';
+    private currentUserSubject = new BehaviorSubject<any>(null);
+    public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        const storedUser = localStorage.getItem('currentUser');
+        if (storedUser) {
+            this.currentUserSubject.next(JSON.parse(storedUser));
+        }
+    }
 
-  register(user: { username: string; email: string; password: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/register`, user);
-  }
+    login(email: string, password: string): Observable<any> {
+        return this.http.post(`${environment.apiUrl}/auth/login`, { email, password })
+            .pipe(
+                tap(user => {
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    this.currentUserSubject.next(user);
+                })
+            );
+    }
 
-  login(credentials: { email: string; password: string }): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials)
-      .pipe(
-        tap(response => {
-          if (response.token) {
-            localStorage.setItem('token', response.token);
-          }
-        })
-      );
-  }
+    register(username: string, email: string, password: string): Observable<any> {
+        return this.http.post(`${environment.apiUrl}/auth/register`, { username, email, password });
+    }
 
-  logout(): void {
-    localStorage.removeItem('token');
-  }
+    logout(): void {
+        localStorage.removeItem('currentUser');
+        this.currentUserSubject.next(null);
+    }
 
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
-  }
+    getUserId(): number | null {
+        const user = this.currentUserSubject.value;
+        return user ? user.id : null;
+    }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
-  }
+    isAuthenticated(): boolean {
+        return this.currentUserSubject.value !== null;
+    }
 } 

@@ -1,0 +1,44 @@
+<div class="create-article-container">
+    <div class="header">
+        <a routerLink="/articles" class="back-button">
+            <mat-icon>arrow_back</mat-icon>
+        </a>
+        <h1>Créer un nouvel article</h1>
+    </div>
+
+    <form [formGroup]="articleForm" (ngSubmit)="onSubmit()" class="article-form">
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Sélectionner un thème</mat-label>
+            <mat-select formControlName="subjectId">
+                <mat-option *ngFor="let subject of subjects" [value]="subject.id">
+                    {{ subject.name }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="articleForm.get('subjectId')?.hasError('required')">
+                Le thème est requis
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Titre de l'article</mat-label>
+            <input matInput formControlName="title" placeholder="Entrez le titre">
+            <mat-error *ngIf="articleForm.get('title')?.hasError('required')">
+                Le titre est requis
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Contenu de l'article</mat-label>
+            <textarea matInput formControlName="content" rows="10" placeholder="Rédigez votre article"></textarea>
+            <mat-error *ngIf="articleForm.get('content')?.hasError('required')">
+                Le contenu est requis
+            </mat-error>
+        </mat-form-field>
+
+        <div class="error-message" *ngIf="error">{{ error }}</div>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="!articleForm.valid">
+            Créer
+        </button>
+    </form>
+</div> 

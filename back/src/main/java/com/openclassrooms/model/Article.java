@@ -39,8 +39,8 @@ public class Article {
     private User auteur;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subject_id", nullable = false)
-    private Subject subject;
+    @JoinColumn(name = "sujet_id", nullable = false)
+    private Sujet sujet;
 
     @PrePersist
     protected void onCreate() {

@@ -23,8 +23,8 @@ public class Subscription {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "subject_id", nullable = false)
-    private Subject subject;
+    @JoinColumn(name = "sujet_id", nullable = false)
+    private Sujet sujet;
 
     @Column(name = "date_creation", nullable = false, updatable = false)
     private LocalDateTime dateCreation;

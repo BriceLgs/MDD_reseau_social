@@ -29,12 +29,13 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      this.authService.register(this.registerForm.value).subscribe({
+      const { username, email, password } = this.registerForm.value;
+      this.authService.register(username, email, password).subscribe({
         next: () => {
           this.router.navigate(['/login']);
         },
         error: (err: any) => {
-          this.error = err.error.message || 'Une erreur est survenue lors de l\'inscription';
+          this.error = err.error.message || 'Erreur lors de l\'inscription';
         }
       });
     }

@@ -1,34 +1,6 @@
-<nav class="navbar">
-  <img class="logo" src="assets/logo_p6.png" alt="MDD Logo">
-  
-  <!-- Menu desktop -->
-  <div class="nav-links desktop-menu">
-    <a routerLink="/articles" class="nav-link active">Articles</a>
-    <a routerLink="/themes" class="nav-link">Thèmes</a>
-    <button mat-button (click)="logout()" class="logout-btn">Se déconnecter</button>
-    <button mat-icon-button class="profile-btn">
-      <mat-icon>account_circle</mat-icon>
-    </button>
-  </div>
-
-  <!-- Menu mobile -->
-  <button mat-icon-button class="mobile-menu-btn" (click)="toggleMobileMenu()">
-    <mat-icon>menu</mat-icon>
-  </button>
-
-  <div class="mobile-menu" [class.show]="isMobileMenuOpen">
-    <a routerLink="/articles" class="nav-link active">Articles</a>
-    <a routerLink="/themes" class="nav-link">Thèmes</a>
-    <button mat-button (click)="logout()" class="logout-btn">Se déconnecter</button>
-    <button mat-icon-button class="profile-btn" routerLink="/me">
-      <mat-icon>account_circle</mat-icon>
-    </button>
-  </div>
-</nav>
-
 <div class="container">
   <div class="header">
-    <button mat-raised-button color="primary" class="create-article-btn" routerLink="/create-article">
+    <button mat-raised-button color="primary" routerLink="/articles/create" class="create-button">
       Créer un article
     </button>
     <div class="sort-container">
