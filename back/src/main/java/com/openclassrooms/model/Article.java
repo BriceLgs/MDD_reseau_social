@@ -1,8 +1,11 @@
 package com.openclassrooms.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +15,8 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@ToString(exclude = {"author", "theme"})  // Éviter les boucles infinies dans toString()
 public class Article {
     
     @Id
@@ -19,37 +24,49 @@ public class Article {
     private Long id;
 
     @Column(nullable = false)
-    private String titre;
+    private String title;
 
     @Column(columnDefinition = "TEXT")
-    private String contenu;
+    private String content;
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "author_id", nullable = false, updatable = false)
+    private User author;
+
+    @Column(name = "theme", nullable = false)
+    private String themeName;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "theme_id", nullable = false)
+    private Theme theme;
+
+    @Column(nullable = false)
+    private LocalDateTime dateCreation;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ArticleStatus status = ArticleStatus.BROUILLON;
-
-    @Column(name = "date_creation", nullable = false, updatable = false)
-    private LocalDateTime dateCreation;
+    private ArticleStatus status = ArticleStatus.DRAFT;
 
     @Column(name = "date_modification")
     private LocalDateTime dateModification;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auteur_id")
-    private User auteur;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sujet_id", nullable = false)
-    private Sujet sujet;
-
     @PrePersist
     protected void onCreate() {
-        dateCreation = LocalDateTime.now();
+        if (dateCreation == null) {
+            dateCreation = LocalDateTime.now();
+        }
+        if (themeName == null && theme != null) {
+            themeName = theme.getName();
+        }
         dateModification = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
+        if (themeName == null && theme != null) {
+            themeName = theme.getName();
+        }
         dateModification = LocalDateTime.now();
     }
 } 

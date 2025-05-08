@@ -12,14 +12,24 @@
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="loginForm">
       <mat-form-field class="form-field" appearance="fill">
-          <mat-label>E-mail ou nom d'utilisateur</mat-label>
+          <mat-label>E-mail</mat-label>
           <input matInput formControlName="email" type="email" required>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">L'email est requis</mat-error>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">Veuillez entrer un email valide</mat-error>
       </mat-form-field>
       <mat-form-field class="form-field" appearance="fill">
           <mat-label>Mot de passe</mat-label>
           <input matInput formControlName="password" type="password" required>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">Le mot de passe est requis</mat-error>
       </mat-form-field>
   
-      <button mat-raised-button color="primary" type="submit">Se connecter</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="isLoading || !loginForm.valid">
+          <mat-spinner *ngIf="isLoading" diameter="20" class="spinner"></mat-spinner>
+          <span *ngIf="!isLoading">Se connecter</span>
+      </button>
+      
+      <div *ngIf="error" class="error-message">
+          {{ error }}
+      </div>
   </form>
 </div>

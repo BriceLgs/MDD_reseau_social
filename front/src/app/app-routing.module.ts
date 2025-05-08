@@ -6,7 +6,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { ArticlesComponent } from './pages/articles/articles.component';
 import { ArticleComponent } from './pages/article/article.component';
 import { MeComponent } from './pages/me/me.component';
-import { SujetsComponent } from './pages/sujets/sujets.component';
+import { ThemesComponent } from './pages/themes/themes.component';
 import { CreateArticleComponent } from './pages/create-article/create-article.component';
 
 const routes: Routes = [
@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: 'article', redirectTo: 'articles', pathMatch: 'full' },
   { path: 'article/:id', component: ArticleComponent },
   { path: 'me', component: MeComponent },
-  { path: 'sujets', component: SujetsComponent }
+  { path: 'themes', component: ThemesComponent }
 ];
 
 @NgModule({

@@ -1,13 +1,16 @@
 .navbar {
     display: flex;
-    justify-content: left;
+    justify-content: center;
     align-items: center;
     height: 100px;
     border-bottom: 1px solid black;
+    background-color: #3f51b5;
+    padding: 10px 20px;
+    margin-bottom: 30px;
 }
 
  .logo {
-    height: 100px;
+    height: 40px;
     margin: 35px;
   }
 
@@ -16,7 +19,9 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
-  }
+    max-width: 600px;
+    margin: 0 auto;
+}
 
 .registerForm {
     display: flex;
@@ -29,60 +34,91 @@
     flex-direction: row;
     justify-content: left;
     padding: 20px;
+    align-items: center;
+    margin-bottom: 20px;
 
     h1 {
         font-size: 34px;
+        margin-left: 10px;
+        margin-bottom: 0;
     }
 
     .back-button {
         position: absolute;
         left: 30px;
+        margin-right: 10px;
     }
 }
 
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 
-  
- 
-  
-  .registerForm {
+.form-field {
+    width: 100%;
+}
+
+.error-message {
+    color: #f44336;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: rgba(244, 67, 54, 0.1);
+    border-radius: 4px;
+    text-align: center;
+}
+
+.registerForm {
     width: 100%;
     max-width: 300px;
     max-height: auto;
     flex-direction: column;
-    
-  }
+}
 
-  mat-form-field {
+mat-form-field {
     width: 100%;
-  }
-  mat-label {
-    font-size: 16px;
-  }
+}
 
-  input {
+mat-label {
     font-size: 16px;
-  }
+}
 
-  @media (max-width: 768px) {
+input {
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
     .register-container {
-      padding: 16px;
+        padding: 16px;
     }
-  
+
     .logo img {
-      width: 120px;
+        width: 120px;
     }
-  
+
     h1 {
-      font-size: 20px;
+        font-size: 20px;
     }
-  
+
     form {
-      max-width: 100%;
+        max-width: 100%;
     }
-  
-    button{
-      width: 100%; 
+
+    button {
+        width: 100%;
     }
-  }
+}
+
+button {
+    position: relative;
+    
+    .spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
   
   

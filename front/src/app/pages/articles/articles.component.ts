@@ -1,13 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-interface Article {
-  id: string;
-  title: string;
-  date: Date;
-  author: string;
-  content: string;
-}
+import { ArticleService, Article } from 'src/app/services/article.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-articles',
@@ -15,56 +9,35 @@ interface Article {
   styleUrls: ['./articles.component.scss']
 })
 export class ArticlesComponent implements OnInit {
-  articles: Article[] = [
-    {
-      id: '1',
-      title: 'Titre de l\'article',
-      date: new Date(),
-      author: 'Auteur',
-      content: 'Content: lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled...'
-    },
-    {
-      id: '2',
-      title: 'Titre de l\'article',
-      date: new Date(),
-      author: 'Auteur',
-      content: 'Content: lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled...'
-    },
-    {
-      id: '3',
-      title: 'Titre de l\'article',
-      date: new Date(),
-      author: 'Auteur',
-      content: 'Content: lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled...'
-    },
-    {
-      id: '4',
-      title: 'Titre de l\'article',
-      date: new Date(),
-      author: 'Auteur',
-      content: 'Content: lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled...'
-    }
-  ];
-
+  articles: Article[] = [];
   sortAscending = true;
   isMobileMenuOpen = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router, 
+    private articleService: ArticleService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    // Ici, nous ajouterons plus tard la logique pour charger les articles depuis l'API
+    this.loadArticles();
+  }
+
+  loadArticles(): void {
+    this.articleService.getAllArticles().subscribe(articles => {
+      this.articles = articles;
+    });
   }
 
   logout(): void {
-    // Ajoutez ici la logique de déconnexion
-    localStorage.removeItem('token');
+    this.authService.logout();
     this.router.navigate(['/']);
   }
 
   toggleSort(): void {
     this.sortAscending = !this.sortAscending;
     this.articles.sort((a, b) => {
-      const comparison = a.date.getTime() - b.date.getTime();
+      const comparison = new Date(a.dateCreation).getTime() - new Date(b.dateCreation).getTime();
       return this.sortAscending ? comparison : -comparison;
     });
   }
@@ -73,7 +46,7 @@ export class ArticlesComponent implements OnInit {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
-  navigateToArticle(id: string): void {
+  navigateToArticle(id: number): void {
     this.router.navigate(['/article', id]);
   }
 } 

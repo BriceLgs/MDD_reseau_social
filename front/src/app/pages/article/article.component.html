@@ -15,26 +15,26 @@
     <button mat-icon-button class="back-button" (click)="goBack()">
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <h1>{{ article.title }}</h1>
+    <h1>{{ article?.title }}</h1>
   </div>
 
   <div class="article-meta">
-    <span class="date">{{ article.date | date:'dd/MM/yyyy' }}</span>
-    <span class="author">{{ article.author }}</span>
-    <span class="theme">{{ article.theme }}</span>
+    <span class="date">{{ article?.dateCreation | date:'dd/MM/yyyy' }}</span>
+    <span class="author">{{ article?.authorUsername }}</span>
+    <span class="theme">{{ article?.theme }}</span>
   </div>
 
   <div class="article-content">
-    <p>{{ article.content }}</p>
+    <p>{{ article?.content }}</p>
   </div>
 
   <div class="comments-section">
     <h2>Commentaires</h2>
     
     <div class="comments-list">
-      <div class="comment" *ngFor="let comment of article.comments">
+      <div class="comment" *ngFor="let comment of comments">
         <div class="comment-header">
-          <span class="username">{{ comment.username }}</span>
+          <span class="username">{{ comment.authorUsername }}</span>
         </div>
         <div class="comment-content">
           <p>{{ comment.content }}</p>

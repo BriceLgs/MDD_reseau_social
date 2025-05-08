@@ -1,0 +1,51 @@
+.themes-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.theme {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.theme-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.theme-content h2 {
+  margin: 0;
+  color: #333;
+}
+
+.theme-content p {
+  margin: 0;
+  color: #666;
+}
+
+.add-theme {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 30px;
+}
+
+.add-theme h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+button {
+  margin-top: 10px;
+} 

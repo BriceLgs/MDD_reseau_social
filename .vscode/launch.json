@@ -2,13 +2,28 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MddApiApplication",
+            "request": "launch",
+            "mainClass": "com.openclassrooms.MddApiApplication",
+            "projectName": "mdd-api"
+        },
+        {
+            "type": "java",
+            "name": "MddApplication",
+            "request": "launch",
+            "mainClass": "com.openclassrooms.MddApplication",
+            "projectName": "mdd-api"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-MddApiApplication<mdd-api>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "mainClass": "com.openclassrooms.mddapi.MddApiApplication",
             "projectName": "mdd-api",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=58992 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=mdd-api"
         }
     ]
 }

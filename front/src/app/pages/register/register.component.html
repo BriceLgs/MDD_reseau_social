@@ -38,12 +38,18 @@
       </mat-error>
     </mat-form-field>
 
-    <div *ngIf="error" class="alert alert-danger">
+    <div *ngIf="error" class="error-message">
       {{ error }}
     </div>
 
-    <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid">
-      S'inscrire
+    <button mat-raised-button color="primary" type="submit" [disabled]="isLoading || !registerForm.valid">
+      <mat-spinner *ngIf="isLoading" diameter="20" class="spinner"></mat-spinner>
+      <span *ngIf="!isLoading">S'inscrire</span>
     </button>
+    
+    <div class="login-link">
+      <span>Déjà inscrit ?</span>
+      <a routerLink="/login">Se connecter</a>
+    </div>
   </form>
 </div>

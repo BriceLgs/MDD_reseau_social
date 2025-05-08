@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ArticleService, Comment as ApiComment } from 'src/app/services/article.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 interface Comment {
   username: string;
@@ -23,31 +25,34 @@ interface Article {
   styleUrls: ['./article.component.scss']
 })
 export class ArticleComponent implements OnInit {
-  article: Article = {
-    id: '1',
-    title: 'Titre de l\'article sélectionné',
-    content: 'Content: lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-    author: 'Auteur',
-    date: new Date(),
-    theme: 'Thème',
-    comments: [
-      {
-        username: 'username',
-        content: 'contenu du commentaire',
-        date: new Date()
-      }
-    ]
-  };
-
+  article: any = null;
+  comments: ApiComment[] = [];
   newComment: string = '';
+  articleId: number = 0;
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private articleService: ArticleService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    const articleId = this.route.snapshot.paramMap.get('id');
+    this.articleId = Number(this.route.snapshot.paramMap.get('id'));
+    this.loadArticle();
+    this.loadComments();
+  }
+
+  loadArticle(): void {
+    this.articleService.getArticleById(this.articleId).subscribe(article => {
+      this.article = article;
+    });
+  }
+
+  loadComments(): void {
+    this.articleService.getCommentsByArticleId(this.articleId).subscribe(comments => {
+      this.comments = comments;
+    });
   }
 
   goBack(): void {
@@ -55,18 +60,19 @@ export class ArticleComponent implements OnInit {
   }
 
   logout(): void {
-    localStorage.removeItem('token');
+    this.authService.logout();
     this.router.navigate(['/']);
   }
 
   submitComment(): void {
     if (this.newComment.trim()) {
-      this.article.comments.push({
-        username: 'Utilisateur a remplacer',
+      this.articleService.postComment({
         content: this.newComment,
-        date: new Date()
+        articleId: this.articleId
+      }).subscribe(() => {
+        this.newComment = '';
+        this.loadComments();
       });
-      this.newComment = '';
     }
   }
 } 

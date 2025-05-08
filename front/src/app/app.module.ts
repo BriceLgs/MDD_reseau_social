@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 // Material Modules
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +11,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,8 +22,9 @@ import { LoginComponent } from './pages/login/login.component';
 import { ArticlesComponent } from './pages/articles/articles.component';
 import { ArticleComponent } from './pages/article/article.component';
 import { MeComponent } from './pages/me/me.component';
-import { SujetsComponent } from './pages/sujets/sujets.component';
+import { ThemesComponent } from './pages/themes/themes.component';
 import { CreateArticleComponent } from './pages/create-article/create-article.component';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -32,7 +35,7 @@ import { CreateArticleComponent } from './pages/create-article/create-article.co
     ArticlesComponent,
     ArticleComponent,
     MeComponent,
-    SujetsComponent,
+    ThemesComponent,
     CreateArticleComponent
   ],
   imports: [
@@ -48,9 +51,13 @@ import { CreateArticleComponent } from './pages/create-article/create-article.co
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,14 @@
+<div class="themes-container">
+  <div class="theme" *ngFor="let theme of themes">
+    <div class="theme-content">
+      <h2>{{ theme.name }}</h2>
+      <p>{{ theme.description }}</p>
+      <button mat-button color="primary" 
+              (click)="theme.id ? gererAbonnement(theme.id) : null"
+              [disabled]="estAbonne(theme.id)"
+              [ngClass]="{'abonne': estAbonne(theme.id)}">
+        {{ theme.id ? (estAbonne(theme.id) ? 'Déjà abonné' : 'S\'abonner') : '' }}
+      </button>
+    </div>
+  </div>
+</div> 

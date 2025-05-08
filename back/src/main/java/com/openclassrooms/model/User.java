@@ -1,11 +1,17 @@
 package com.openclassrooms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,6 +19,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@ToString(exclude = {"articles", "subscriptions"})
 public class User {
     
     @Id
@@ -25,20 +33,25 @@ public class User {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "date_creation", nullable = false, updatable = false)
+    @Column(name = "date_creation")
     private LocalDateTime dateCreation;
 
-    @OneToMany(mappedBy = "auteur", cascade = CascadeType.ALL)
-    private List<Article> articles;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    private List<Article> articles = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Subscription> subscriptions;
+    private List<Subscription> subscriptions = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
-        dateCreation = LocalDateTime.now();
+        if (dateCreation == null) {
+            dateCreation = LocalDateTime.now();
+        }
     }
 } 
