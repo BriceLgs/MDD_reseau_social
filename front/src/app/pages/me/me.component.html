@@ -1,20 +1,20 @@
-<div class="container mt-5">
-  <h1 class="mb-4">Mon Profil</h1>
-  
-  <div *ngIf="loading" class="d-flex justify-content-center">
+<div class="me-container">
+  <!-- Loader -->
+  <div *ngIf="loading" class="loader-container">
     <div class="spinner-border" role="status">
       <span class="visually-hidden">Chargement...</span>
     </div>
   </div>
 
-  <div *ngIf="error" class="alert alert-danger">
+  <!-- Message d'erreur -->
+  <div *ngIf="error" class="error-message">
     {{ error }}
-    <div *ngIf="debugInfo" class="mt-2">
-      <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#debugInfo" aria-expanded="false" aria-controls="debugInfo">
+    <div *ngIf="debugInfo" class="debug-section">
+      <button class="debug-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#debugInfo" aria-expanded="false" aria-controls="debugInfo">
         Afficher les détails techniques
       </button>
-      <div class="collapse mt-2" id="debugInfo">
-        <div class="card card-body">
+      <div class="collapse" id="debugInfo">
+        <div class="debug-content">
           <pre>{{ debugInfo }}</pre>
         </div>
       </div>
@@ -22,78 +22,44 @@
   </div>
 
   <div *ngIf="!loading && !error && user">
-    <!-- Informations utilisateur -->
-    <div class="card mb-4">
-      <div class="card-header bg-primary text-white">
-        <h2 class="h5 mb-0">Informations personnelles</h2>
-      </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-4">
-            <p><strong>Nom d'utilisateur:</strong></p>
-            <p><strong>Adresse e-mail:</strong></p>
-          </div>
-          <div class="col-md-8">
-            <p>{{ user.username }}</p>
-            <p>{{ user.email }}</p>
-          </div>
-        </div>
-      </div>
+    <h1 class="profile-title">Profil utilisateur</h1>
+    
+    <!-- Section informations personnelles -->
+    <div class="profile-section">
+      <input type="text" class="profile-input" [value]="user.username" disabled>
+      <input type="email" class="profile-input" [value]="user.email" disabled>
+      <input type="password" class="profile-input" value="••••••••" disabled>
+      
+      <button class="save-button">Sauvegarder</button>
     </div>
-
-    <!-- Abonnements -->
-    <div class="card">
-      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-        <h2 class="h5 mb-0">Mes abonnements</h2>
-        <button class="btn btn-sm btn-light" (click)="loadAllSubscriptionsDebug()">
-          <i class="bi bi-arrow-clockwise"></i> Recharger
+    
+    <hr class="section-divider">
+    
+    <!-- Section abonnements -->
+    <h2 class="section-title">Abonnements</h2>
+    
+    <div *ngIf="subscriptions.length === 0" class="no-subscriptions">
+      Vous n'êtes abonné à aucun thème. Parcourez nos thèmes pour vous abonner.
+    </div>
+    
+    <div class="subscriptions-grid" *ngIf="subscriptions.length > 0">
+      <div class="theme-card" *ngFor="let subscription of subscriptions">
+        <h3 class="theme-title">{{ subscription.themeName }}</h3>
+        <p class="theme-description">
+          Description: lorem ipsum is simply dummy text of the 
+          printing and typesetting industry. Lorem Ipsum has 
+          been the industry's standard...
+        </p>
+        <button class="unsubscribe-button" (click)="unsubscribe(subscription.themeId)">
+          Se désabonner
         </button>
       </div>
-      <div class="card-body">
-        <div *ngIf="subscriptions.length === 0" class="alert alert-info">
-          Vous n'êtes abonné à aucun thème. Parcourez nos thèmes pour vous abonner.
-        </div>
-        
-        <div *ngIf="subscriptions.length > 0" class="table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>Thème</th>
-                <th>Date d'abonnement</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let subscription of subscriptions">
-                <td>{{ subscription.themeName }}</td>
-                <td>{{ subscription.dateSubscription | date:'dd/MM/yyyy' }}</td>
-                <td>
-                  <button class="btn btn-sm btn-danger" (click)="unsubscribe(subscription.themeId)">
-                    Se désabonner
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
-
+    
     <!-- Informations de débogage (si besoin) -->
-    <div *ngIf="showingDebugInfo && debugInfo" class="mt-4 card">
-      <div class="card-header bg-secondary text-white">
-        <h3 class="h5 mb-0">Informations de débogage</h3>
-      </div>
-      <div class="card-body">
-        <pre class="mb-0">{{ debugInfo }}</pre>
-      </div>
-    </div>
-
-    <!-- Bouton pour naviguer vers les thèmes -->
-    <div class="mt-4">
-      <a routerLink="/themes" class="btn btn-primary">
-        Parcourir les thèmes
-      </a>
+    <div *ngIf="showingDebugInfo && debugInfo" class="debug-panel">
+      <h3 class="debug-title">Informations de débogage</h3>
+      <pre class="debug-content">{{ debugInfo }}</pre>
     </div>
   </div>
 </div>

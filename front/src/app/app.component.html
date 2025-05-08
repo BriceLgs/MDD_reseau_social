@@ -3,9 +3,10 @@
   
   <!-- Menu desktop -->
   <div class="nav-links desktop-menu">
+    <button mat-button (click)="logout()" class="logout-btn">Se déconnecter</button>
     <a routerLink="/articles" routerLinkActive="active" class="nav-link">Articles</a>
     <a routerLink="/themes" routerLinkActive="active" class="nav-link">Thèmes</a>
-    <button mat-button (click)="logout()" class="logout-btn">Se déconnecter</button>
+
     <button mat-icon-button class="profile-btn" routerLink="/me">
       <mat-icon>account_circle</mat-icon>
     </button>

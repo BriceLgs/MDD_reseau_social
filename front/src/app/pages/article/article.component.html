@@ -1,10 +1,11 @@
 <nav class="navbar">
   <img class="logo" src="assets/logo_p6.png" alt="MDD Logo">
   <div class="nav-links">
+    <button mat-button (click)="logout()" class="logout-btn">Se déconnecter</button>
     <a routerLink="/articles" class="nav-link">Articles</a>
     <a routerLink="/themes" class="nav-link">Thèmes</a>
   </div>
-  <button mat-button (click)="logout()" class="logout-btn">Se déconnecter</button>
+  
   <button mat-icon-button class="profile-btn" routerLink="/me">
     <mat-icon>account_circle</mat-icon>
   </button>

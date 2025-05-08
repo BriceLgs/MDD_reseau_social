@@ -33,7 +33,7 @@ public class Subscription {
     @JoinColumn(name = "theme_id", nullable = false)
     private Theme theme;
 
-    @Column(name = "date_subscription", nullable = false)
+    @Column(name = "date_creation", nullable = false)
     private LocalDateTime dateSubscription;
 
     @PrePersist

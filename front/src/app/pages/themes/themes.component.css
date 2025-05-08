@@ -1,51 +1,69 @@
-.themes-container {
-  padding: 20px;
+.container {
+  margin-top: 80px;
+  padding: 2rem;
   max-width: 1200px;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.theme {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-  padding: 20px;
-}
-
-.theme-content {
+.header {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
-.theme-content h2 {
-  margin: 0;
-  color: #333;
+.themes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
 }
 
-.theme-content p {
-  margin: 0;
-  color: #666;
-}
-
-.add-theme {
-  background-color: #f5f5f5;
+.theme-card {
+  background: white;
   border-radius: 8px;
-  padding: 20px;
-  margin-top: 30px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
 }
 
-.add-theme h3 {
-  margin-top: 0;
-  margin-bottom: 20px;
-  color: #333;
+.theme-card:hover {
+  transform: translateY(-4px);
 }
 
-mat-form-field {
-  width: 100%;
-  margin-bottom: 15px;
+mat-card-header {
+  padding: 1rem;
 }
 
-button {
-  margin-top: 10px;
+mat-card-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+mat-card-content {
+  padding: 0 1rem 1rem;
+}
+
+mat-card-content p {
+  color: #444;
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+mat-card-actions {
+  padding: 0 1rem 1rem;
+}
+
+.abonne {
+  background-color: #4CAF50;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .themes-grid {
+    grid-template-columns: 1fr;
+  }
 } 

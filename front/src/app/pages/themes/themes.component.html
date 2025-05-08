@@ -1,14 +1,24 @@
-<div class="themes-container">
-  <div class="theme" *ngFor="let theme of themes">
-    <div class="theme-content">
-      <h2>{{ theme.name }}</h2>
-      <p>{{ theme.description }}</p>
-      <button mat-button color="primary" 
-              (click)="theme.id ? gererAbonnement(theme.id) : null"
-              [disabled]="estAbonne(theme.id)"
-              [ngClass]="{'abonne': estAbonne(theme.id)}">
-        {{ theme.id ? (estAbonne(theme.id) ? 'Déjà abonné' : 'S\'abonner') : '' }}
-      </button>
-    </div>
+<div class="container">
+  <div class="header">
+    <h1>Thèmes</h1>
+  </div>
+
+  <div class="themes-grid">
+    <mat-card class="theme-card" *ngFor="let theme of themes">
+      <mat-card-header>
+        <mat-card-title>{{ theme.name }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ theme.description }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" 
+                (click)="theme.id ? gererAbonnement(theme.id) : null"
+                [disabled]="estAbonne(theme.id)"
+                [ngClass]="{'abonne': estAbonne(theme.id)}">
+          {{ theme.id ? (estAbonne(theme.id) ? 'Déjà abonné' : 'S\'abonner') : '' }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </div>
 </div> 

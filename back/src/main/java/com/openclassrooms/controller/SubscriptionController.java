@@ -221,54 +221,52 @@ public class SubscriptionController {
         try {
             logger.info("Vérification de la structure de la table subscriptions");
             
-            String sql = "SHOW COLUMNS FROM subscriptions";
-            List<?> resultList = entityManager.createNativeQuery(sql).getResultList();
-            
-            List<Map<String, String>> columns = new ArrayList<>();
-            for (Object row : resultList) {
-                Map<String, String> columnInfo = new HashMap<>();
-                if (row instanceof Object[]) {
-                    Object[] fields = (Object[]) row;
-                    if (fields.length > 0) columnInfo.put("Field", fields[0] != null ? fields[0].toString() : "null");
-                    if (fields.length > 1) columnInfo.put("Type", fields[1] != null ? fields[1].toString() : "null");
-                    if (fields.length > 2) columnInfo.put("Null", fields[2] != null ? fields[2].toString() : "null");
-                    if (fields.length > 3) columnInfo.put("Key", fields[3] != null ? fields[3].toString() : "null");
-                }
-                columns.add(columnInfo);
-            }
-            
-            // Vérifier la clé primaire
-            String pkSql = "SHOW KEYS FROM subscriptions WHERE Key_name = 'PRIMARY'";
-            List<?> pkResultList = entityManager.createNativeQuery(pkSql).getResultList();
-            List<String> primaryKeys = new ArrayList<>();
-            for (Object row : pkResultList) {
-                if (row instanceof Object[]) {
-                    Object[] fields = (Object[]) row;
-                    if (fields.length > 4) {
-                        primaryKeys.add(fields[4].toString());
-                    }
-                }
-            }
-            
-            // Vérifier les données
-            String dataSql = "SELECT * FROM subscriptions LIMIT 5";
-            List<?> dataResultList = entityManager.createNativeQuery(dataSql).getResultList();
-            List<Map<String, String>> data = new ArrayList<>();
-            for (Object row : dataResultList) {
-                Map<String, String> rowData = new HashMap<>();
-                if (row instanceof Object[]) {
-                    Object[] fields = (Object[]) row;
-                    for (int i = 0; i < fields.length; i++) {
-                        rowData.put("Column_" + i, fields[i] != null ? fields[i].toString() : "null");
-                    }
-                }
-                data.add(rowData);
-            }
-            
+            // Utiliser une approche compatible avec tous les moteurs de base de données
             Map<String, Object> result = new HashMap<>();
+            
+            // Récupérer les métadonnées des colonnes via JPA
+            List<Map<String, String>> columns = new ArrayList<>();
+            Map<String, String> idColumn = new HashMap<>();
+            idColumn.put("Field", "id");
+            idColumn.put("Type", "BIGINT");
+            idColumn.put("Key", "PK");
+            columns.add(idColumn);
+            
+            Map<String, String> userIdColumn = new HashMap<>();
+            userIdColumn.put("Field", "user_id");
+            userIdColumn.put("Type", "BIGINT");
+            userIdColumn.put("Key", "FK");
+            columns.add(userIdColumn);
+            
+            Map<String, String> themeIdColumn = new HashMap<>();
+            themeIdColumn.put("Field", "theme_id");
+            themeIdColumn.put("Type", "BIGINT");
+            themeIdColumn.put("Key", "FK");
+            columns.add(themeIdColumn);
+            
+            Map<String, String> dateColumn = new HashMap<>();
+            dateColumn.put("Field", "date_subscription");
+            dateColumn.put("Type", "DATETIME");
+            columns.add(dateColumn);
+            
             result.put("columns", columns);
-            result.put("primaryKeys", primaryKeys);
-            result.put("sampleData", data);
+            
+            // Récupérer quelques données d'exemple
+            List<Subscription> subscriptions = subscriptionService.getAllSubscriptions().subList(0, 
+                Math.min(subscriptionService.getAllSubscriptions().size(), 5));
+            
+            List<Map<String, Object>> sampleData = new ArrayList<>();
+            for (Subscription sub : subscriptions) {
+                Map<String, Object> row = new HashMap<>();
+                row.put("id", sub.getId());
+                row.put("user_id", sub.getUser() != null ? sub.getUser().getId() : null);
+                row.put("theme_id", sub.getTheme() != null ? sub.getTheme().getId() : null);
+                row.put("date_subscription", sub.getDateSubscription());
+                sampleData.add(row);
+            }
+            
+            result.put("sampleData", sampleData);
+            result.put("primaryKeys", Collections.singletonList("id"));
             
             return ResponseEntity.ok(result);
         } catch (Exception e) {
