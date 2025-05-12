@@ -36,6 +36,9 @@ public class Article {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "author_id", nullable = false, updatable = false)
     private User author;
+    
+    @Column(name = "author_username")
+    private String authorUsername;
 
     @Column(name = "theme", nullable = false)
     private String themeName;
@@ -66,6 +69,9 @@ public class Article {
         if (themeName == null && theme != null) {
             themeName = theme.getName();
         }
+        if (authorUsername == null && author != null) {
+            authorUsername = author.getUsername();
+        }
         dateModification = LocalDateTime.now();
     }
 
@@ -73,6 +79,9 @@ public class Article {
     protected void onUpdate() {
         if (themeName == null && theme != null) {
             themeName = theme.getName();
+        }
+        if (authorUsername == null && author != null) {
+            authorUsername = author.getUsername();
         }
         dateModification = LocalDateTime.now();
     }

@@ -1,13 +1,16 @@
 <div class="container">
   <div class="header">
-    <button mat-raised-button color="primary" routerLink="/articles/create" class="create-button">
-      Créer un article
-    </button>
-    <div class="sort-container">
-      <span>Trier par</span>
-      <button mat-icon-button (click)="toggleSort()">
-        <mat-icon>arrow_downward</mat-icon>
+    <div class="actions">
+      <button mat-raised-button color="primary" class="create-article-btn" routerLink="/articles/create">
+        <mat-icon>add</mat-icon> Créer un article
       </button>
+      
+      <div class="sort-container">
+        <span>Trier par date:</span>
+        <button mat-icon-button (click)="toggleSort()">
+          <mat-icon>{{ sortAscending ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -17,7 +20,7 @@
         <mat-card-title>{{ article.title }}</mat-card-title>
         <mat-card-subtitle>
           <span class="date">{{ article.dateCreation | date:'dd/MM/yyyy' }}</span>
-          <span class="author">{{ article.authorUsername }}</span>
+          <span class="author">{{ article.author?.username || article.authorUsername }}</span>
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>

@@ -75,14 +75,14 @@ public class ArticleController {
         try {
             logger.info("=== DÉBUT REQUÊTE CRÉATION ARTICLE ===");
             
-            // Déterminer le themeId à utiliser (paramètre URL ou DTO)
+            // quel themId utiliser
             Long finalThemeId = themeId;
             if (finalThemeId == null && articleDto.getThemeId() != null) {
                 finalThemeId = articleDto.getThemeId();
                 logger.info("Utilisation du themeId depuis le DTO: {}", finalThemeId);
             }
             
-            // Validation spécifique pour themeId
+            //  pour themeId
             if (finalThemeId == null) {
                 logger.error("Le themeId est manquant (absent dans les paramètres et dans le DTO)");
                 Map<String, String> errorResponse = new HashMap<>();
@@ -90,16 +90,37 @@ public class ArticleController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
             }
             
-            // Utiliser l'ID utilisateur fixe pour debug (temporaire)
-            Long userId = 1L;
             
-            // Construction de l'objet Article
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated() || 
+                !(authentication.getPrincipal() instanceof UserDetails)) {
+                logger.error("Tentative de création d'article sans authentification valide");
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Vous devez être connecté pour créer un article");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            }
+            
+            
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername();
+            Long userId = articleService.getUserIdByEmail(email);
+            
+            if (userId == null) {
+                logger.error("Utilisateur avec l'email {} non trouvé en base", email);
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Utilisateur non trouvé");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            }
+            
+            logger.info("Création d'article par l'utilisateur: {}", userId);
+            
+           
             Article article = new Article();
             article.setTitle(articleDto.getTitle());
             article.setContent(articleDto.getContent());
             article.setStatus(ArticleStatus.DRAFT);
             
-            // Création directe de l'article avec son thème (sans validation supplémentaire)
+            // Création directe de l'article avec son thème
             try {
                 Article createdArticle = articleService.createArticle(article, userId, finalThemeId);
                 return ResponseEntity.ok(createdArticle);
@@ -120,7 +141,7 @@ public class ArticleController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateArticle(@PathVariable Long id, @RequestBody Article articleDetails) {
         try {
-            // Récupération de l'utilisateur authentifié
+            
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null || !authentication.isAuthenticated()) {
                 logger.error("Tentative de mise à jour d'article sans authentification valide");
@@ -129,7 +150,7 @@ public class ArticleController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
             
-            // Vérification que l'utilisateur est l'auteur de l'article
+            
             Article existingArticle = articleService.getArticleById(id).orElse(null);
             if (existingArticle == null) {
                 return ResponseEntity.notFound().build();
@@ -159,7 +180,7 @@ public class ArticleController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteArticle(@PathVariable Long id) {
         try {
-            // Récupération de l'utilisateur authentifié
+            
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null || !authentication.isAuthenticated()) {
                 logger.error("Tentative de suppression d'article sans authentification valide");
@@ -168,7 +189,7 @@ public class ArticleController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
             
-            // Vérification que l'utilisateur est l'auteur de l'article
+            
             Article existingArticle = articleService.getArticleById(id).orElse(null);
             if (existingArticle == null) {
                 return ResponseEntity.notFound().build();

@@ -1,4 +1,5 @@
-<nav class="navbar" *ngIf="authService.isAuthenticated()">
+<!-- Navbar pour les pages authentifiées -->
+<nav class="navbar" *ngIf="authService.isAuthenticated() && !isHomePage() && !isAuthPage()">
   <img class="logo" src="assets/logo_p6.png" alt="MDD Logo">
   
   <!-- Menu desktop -->
@@ -25,6 +26,11 @@
       <mat-icon>account_circle</mat-icon>
     </button>
   </div>
+</nav>
+
+<!-- Navbar simplifiée pour les pages de connexion/inscription -->
+<nav class="navbar" [class.register-page-navbar]="router.url === '/register' || router.url === '/login'" *ngIf="isAuthPage()">
+  <img class="logo" src="assets/logo_p6.png" alt="MDD Logo">
 </nav>
 
 <router-outlet></router-outlet>

@@ -2,13 +2,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1.5rem 3rem;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 110px;
 }
 
 .logo {
-  height: 40px;
+  height: 80px;
 }
 
 .nav-links {
@@ -69,5 +70,12 @@
 
   .mobile-menu.show {
     display: flex;
+  }
+}
+
+/* Masque la navbar sur mobile pour page login/register */
+@media (max-width: 600px) {
+  .register-page-navbar {
+    display: none !important;
   }
 } 

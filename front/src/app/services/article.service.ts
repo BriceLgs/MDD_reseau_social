@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin, of, map, switchMap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { SubscriptionService } from './subscription.service';
 
 export interface Article {
   id: number;
@@ -11,7 +12,16 @@ export interface Article {
   userId: number;
   dateCreation: string;
   authorUsername?: string;
-  theme?: string;
+  themeName?: string;
+  theme?: {
+    id: number;
+    name: string;
+  };
+  author?: {
+    id: number;
+    username: string;
+    email: string;
+  };
   status?: string;
 }
 
@@ -30,10 +40,36 @@ export interface Comment {
 export class ArticleService {
   private apiUrl = `${environment.apiUrl}/articles`;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private subscriptionService: SubscriptionService
+  ) { }
 
   getAllArticles(): Observable<Article[]> {
     return this.http.get<Article[]>(this.apiUrl);
+  }
+
+  getSubscribedArticles(): Observable<Article[]> {
+    return this.subscriptionService.getUserSubscriptions().pipe(
+      switchMap(subscriptions => {
+        if (!subscriptions || subscriptions.length === 0) {
+          return of([]);
+        }
+
+        const themeIds = subscriptions.map(sub => sub.themeId);
+
+        return this.getAllArticles().pipe(
+          map(articles => {
+            const filteredArticles = articles.filter(article => {
+              const articleThemeId = article.theme?.id || article.themeId;
+              return articleThemeId && themeIds.includes(articleThemeId);
+            });
+            
+            return filteredArticles;
+          })
+        );
+      })
+    );
   }
 
   getArticleById(id: number): Observable<Article> {
@@ -41,26 +77,14 @@ export class ArticleService {
   }
 
   createArticle(article: { title: string, content: string, themeId: number }): Observable<Article> {
-    console.log('Envoi de la création d\'article:', { 
-      title: article.title, 
-      content: article.content ? article.content.substring(0, 50) + '...' : 'vide',
-      themeId: article.themeId
-    });
-    
-    // Données simplifiées pour l'article (sans le themeId dans le corps)
     const simpleArticleData = {
       title: article.title.trim(),
       content: article.content.trim(),
       status: "DRAFT"
     };
-
-    console.log('Données envoyées:', simpleArticleData);
     
-    // Envoi du themeId uniquement dans l'URL (paramètre de requête)
     const params = new HttpParams()
       .set('themeId', article.themeId.toString());
-    
-    console.log('URL avec paramètres:', `${this.apiUrl}?themeId=${article.themeId}`);
 
     return this.http.post<Article>(this.apiUrl, simpleArticleData, { params });
   }

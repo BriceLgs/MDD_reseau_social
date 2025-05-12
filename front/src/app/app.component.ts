@@ -12,7 +12,7 @@ export class AppComponent {
 
   constructor(
     public authService: AuthService,
-    private router: Router
+    public router: Router
   ) {}
 
   toggleMobileMenu(): void {
@@ -22,5 +22,17 @@ export class AppComponent {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  isHomePage(): boolean {
+    return this.router.url === '/';
+  }
+
+  isAuthPage(): boolean {
+    return this.router.url === '/login' || this.router.url === '/register';
+  }
+
+  isMobile(): boolean {
+    return window.innerWidth <= 600;
   }
 }

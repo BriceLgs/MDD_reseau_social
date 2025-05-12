@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ArticleService, Article } from 'src/app/services/article.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { SubscriptionService } from 'src/app/services/subscription.service';
 
 @Component({
   selector: 'app-articles',
@@ -16,7 +17,8 @@ export class ArticlesComponent implements OnInit {
   constructor(
     private router: Router, 
     private articleService: ArticleService,
-    private authService: AuthService
+    private authService: AuthService,
+    private subscriptionService: SubscriptionService
   ) {}
 
   ngOnInit(): void {
@@ -24,8 +26,17 @@ export class ArticlesComponent implements OnInit {
   }
 
   loadArticles(): void {
-    this.articleService.getAllArticles().subscribe(articles => {
+    this.articleService.getSubscribedArticles().subscribe(articles => {
       this.articles = articles;
+      console.log('Articles chargés:', articles);
+      // Afficher la structure du premier article pour voir les propriétés disponibles
+      if (articles.length > 0) {
+        console.log('Exemple d\'article:', articles[0]);
+        console.log('Propriétés de l\'auteur:', 
+          'author=', articles[0].author, 
+          'authorUsername=', articles[0].authorUsername);
+      }
+      this.sortArticles();
     });
   }
 
@@ -36,6 +47,10 @@ export class ArticlesComponent implements OnInit {
 
   toggleSort(): void {
     this.sortAscending = !this.sortAscending;
+    this.sortArticles();
+  }
+
+  sortArticles(): void {
     this.articles.sort((a, b) => {
       const comparison = new Date(a.dateCreation).getTime() - new Date(b.dateCreation).getTime();
       return this.sortAscending ? comparison : -comparison;

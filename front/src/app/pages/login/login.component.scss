@@ -120,5 +120,123 @@ button {
         transform: translate(-50%, -50%);
     }
 }
+
+.mobile-container {
+  width: 100%;
+  position: relative;
+  padding-top: 20px;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  padding: 0;
+}
+
+.arrow {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #222;
+  line-height: 1;
+}
+
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-container {
+  margin: 40px 0 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.logo {
+  width: 180px;
+  height: auto;
+}
+
+.login-title {
+  text-align: center;
+  font-size: 2rem;
+  margin: 0 0 30px;
+  font-weight: 500;
+}
+
+.loginForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 1rem;
+  color: #222;
+}
+
+.form-group input {
+  padding: 12px 16px;
+  border: 2px solid #222;
+  border-radius: 16px;
+  background: #fff;
+  font-size: 1rem;
+  outline: none;
+}
+
+.login-btn {
+  width: 100%;
+  max-width: 200px;
+  margin: 10px auto 0;
+  padding: 12px 0;
+  background: #7b5be6;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: center;
+}
+
+.login-btn:disabled {
+  background: #ccc;
+}
+
+.error-message {
+  color: #f44336;
+  text-align: center;
+}
+
+/* Styles pour desktop */
+@media (min-width: 601px) {
+  .mobile-container {
+    padding-top: 120px; /* Espace pour la navbar en haut */
+  }
+  
+  .back-button {
+    top: 120px; /* Position ajustée pour la navbar */
+    left: 20px;
+  }
+  
+  .logo-container {
+    display: none; /* Cache le logo dans le formulaire sur desktop */
+  }
+}
   
   
