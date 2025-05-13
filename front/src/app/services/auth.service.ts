@@ -19,90 +19,33 @@ export class AuthService {
     }
 
     login(email: string, password: string): Observable<any> {
-        console.log('Tentative de connexion avec:', { email });
+        const loginUrl = `${environment.apiUrl}/auth/login`;
+        const credentials = { email, password };
         
-        if (!email || !password) {
-            return throwError(() => new Error('Email et mot de passe requis'));
-        }
-        
-        return this.http.post(`${environment.apiUrl}/auth/login`, { email, password })
-            .pipe(
-                tap(user => {
-                    console.log('Connexion réussie:', user);
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    this.currentUserSubject.next(user);
-                }),
-                catchError((error: HttpErrorResponse) => {
-                    console.error('Erreur de connexion:', error);
-                    
-                    let errorMessage = 'Une erreur est survenue lors de la connexion';
-                    
-                    if (error.status === 0) {
-                        errorMessage = 'Le serveur est inaccessible. Vérifiez votre connexion réseau.';
-                    } else if (error.status === 400) {
-                        errorMessage = error.error?.message || 'Email ou mot de passe incorrect';
-                    } else if (error.status === 500) {
-                        errorMessage = 'Erreur serveur. Veuillez réessayer plus tard.';
-                    }
-                    
-                    return throwError(() => new Error(errorMessage));
-                })
-            );
+        return this.http.post<any>(loginUrl, credentials).pipe(
+            tap(user => {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                this.currentUserSubject.next(user);
+            }),
+            catchError(error => {
+                return throwError(() => error);
+            })
+        );
     }
 
     register(username: string, email: string, password: string): Observable<any> {
-        console.log('Tentative d\'inscription avec:', { username, email, password: password ? '***' : undefined });
-        
-        if (!username) {
-            console.error('Nom d\'utilisateur manquant');
-            return throwError(() => new Error('Le nom d\'utilisateur est requis'));
-        }
-        
-        if (!email) {
-            console.error('Email manquant');
-            return throwError(() => new Error('L\'email est requis'));
-        }
-        
-        if (!password) {
-            console.error('Mot de passe manquant');
-            return throwError(() => new Error('Le mot de passe est requis'));
-        }
-        
+        const registerUrl = `${environment.apiUrl}/auth/register`;
         const userData = {
-            username: username.trim(),
-            email: email.trim(),
-            password: password
+            username,
+            email,
+            password
         };
         
-        console.log('Envoi des données:', { ...userData, password: '***' });
-        
-        return this.http.post(`${environment.apiUrl}/auth/register`, userData)
-            .pipe(
-                tap(response => {
-                    console.log('Inscription réussie:', response);
-                }),
-                catchError((error: HttpErrorResponse) => {
-                    console.error('Erreur d\'inscription:', error);
-                    console.error('Statut:', error.status);
-                    console.error('Message d\'erreur:', error.error);
-                    
-                    let errorMessage = 'Une erreur est survenue lors de l\'inscription';
-                    
-                    if (error.status === 0) {
-                        errorMessage = 'Le serveur est inaccessible. Vérifiez votre connexion réseau.';
-                    } else if (error.status === 400) {
-                        if (error.error?.message) {
-                            errorMessage = error.error.message;
-                        } else if (error.error?.toString().includes('constraint')) {
-                            errorMessage = 'Cet email ou nom d\'utilisateur existe déjà';
-                        }
-                    } else if (error.status === 500) {
-                        errorMessage = 'Erreur serveur. Veuillez réessayer plus tard.';
-                    }
-                    
-                    return throwError(() => new Error(errorMessage));
-                })
-            );
+        return this.http.post<any>(registerUrl, userData).pipe(
+            catchError(error => {
+                return throwError(() => error);
+            })
+        );
     }
 
     logout(): void {
@@ -115,7 +58,29 @@ export class AuthService {
         return user ? user.id : null;
     }
 
+    getCurrentUser(): any {
+        return this.currentUserSubject.value;
+    }
+
     isAuthenticated(): boolean {
         return this.currentUserSubject.value !== null;
+    }
+
+    updateProfile(userData: { username?: string, email?: string, password?: string }): Observable<any> {
+        const updateUrl = `${environment.apiUrl}/users/me`;
+        
+        return this.http.put<any>(updateUrl, userData).pipe(
+            tap(updatedUser => {
+                const currentUser = this.getCurrentUser();
+                if (currentUser) {
+                    const updatedUserData = { ...currentUser, ...updatedUser };
+                    localStorage.setItem('currentUser', JSON.stringify(updatedUserData));
+                    this.currentUserSubject.next(updatedUserData);
+                }
+            }),
+            catchError(error => {
+                return throwError(() => error);
+            })
+        );
     }
 } 

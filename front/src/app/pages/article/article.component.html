@@ -21,7 +21,7 @@
 
   <div class="article-meta">
     <span class="date">{{ article?.dateCreation | date:'dd/MM/yyyy' }}</span>
-    <span class="author">{{ article?.authorUsername }}</span>
+    <span class="author">{{ article?.author?.username }}</span>
     <span class="theme">{{ article?.themeName || article?.theme?.name || 'Sans thème' }}</span>
   </div>
 

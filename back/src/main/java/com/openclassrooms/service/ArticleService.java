@@ -35,50 +35,22 @@ public class ArticleService {
     private ThemeService themeService;
 
     public List<Article> getAllArticles() {
-        List<Article> articles = articleRepository.findAll();
-        // S'assurer que tous les articles ont un nom d'auteur
-        for (Article article : articles) {
-            if (article.getAuthorUsername() == null && article.getAuthor() != null) {
-                article.setAuthorUsername(article.getAuthor().getUsername());
-            }
-        }
-        return articles;
+        return articleRepository.findAll();
     }
 
     public Optional<Article> getArticleById(Long id) {
-        Optional<Article> articleOpt = articleRepository.findById(id);
-        if (articleOpt.isPresent()) {
-            Article article = articleOpt.get();
-            if (article.getAuthorUsername() == null && article.getAuthor() != null) {
-                article.setAuthorUsername(article.getAuthor().getUsername());
-            }
-        }
-        return articleOpt;
+        return articleRepository.findById(id);
     }
 
     public List<Article> getArticlesByTheme(Long themeId) {
         Theme theme = themeService.getThemeById(themeId);
-        List<Article> articles = articleRepository.findByTheme(theme);
-        // S'assurer que tous les articles ont un nom d'auteur
-        for (Article article : articles) {
-            if (article.getAuthorUsername() == null && article.getAuthor() != null) {
-                article.setAuthorUsername(article.getAuthor().getUsername());
-            }
-        }
-        return articles;
+        return articleRepository.findByTheme(theme);
     }
 
     public List<Article> getArticlesByUser(Long userId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
-        List<Article> articles = articleRepository.findByAuthor(user);
-        // S'assurer que tous les articles ont un nom d'auteur
-        for (Article article : articles) {
-            if (article.getAuthorUsername() == null && article.getAuthor() != null) {
-                article.setAuthorUsername(article.getAuthor().getUsername());
-            }
-        }
-        return articles;
+        return articleRepository.findByAuthor(user);
     }
 
     @Transactional
@@ -111,9 +83,6 @@ public class ArticleService {
             // Important : définir explicitement le nom du thème (colonne "theme")
             newArticle.setThemeName(theme.getName());
             
-            // Définir explicitement le nom d'utilisateur
-            newArticle.setAuthorUsername(user.getUsername());
-            
             newArticle.setDateCreation(LocalDateTime.now());
             newArticle.setStatus(article.getStatus() != null ? article.getStatus() : ArticleStatus.DRAFT);
             
@@ -138,11 +107,6 @@ public class ArticleService {
         }
         if (articleDetails.getStatus() != null) {
             article.setStatus(articleDetails.getStatus());
-        }
-        
-        // S'assurer que le nom d'utilisateur est défini
-        if (article.getAuthorUsername() == null && article.getAuthor() != null) {
-            article.setAuthorUsername(article.getAuthor().getUsername());
         }
 
         return articleRepository.save(article);

@@ -20,7 +20,7 @@
         <mat-card-title>{{ article.title }}</mat-card-title>
         <mat-card-subtitle>
           <span class="date">{{ article.dateCreation | date:'dd/MM/yyyy' }}</span>
-          <span class="author">{{ article.author?.username || article.authorUsername }}</span>
+          <span class="author">{{ article.author?.username }}</span>
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>

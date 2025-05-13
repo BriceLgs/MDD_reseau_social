@@ -11,7 +11,6 @@ export interface Article {
   themeId: number;
   userId: number;
   dateCreation: string;
-  authorUsername?: string;
   themeName?: string;
   theme?: {
     id: number;

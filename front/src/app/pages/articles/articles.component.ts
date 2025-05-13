@@ -28,14 +28,6 @@ export class ArticlesComponent implements OnInit {
   loadArticles(): void {
     this.articleService.getSubscribedArticles().subscribe(articles => {
       this.articles = articles;
-      console.log('Articles chargés:', articles);
-      // Afficher la structure du premier article pour voir les propriétés disponibles
-      if (articles.length > 0) {
-        console.log('Exemple d\'article:', articles[0]);
-        console.log('Propriétés de l\'auteur:', 
-          'author=', articles[0].author, 
-          'authorUsername=', articles[0].authorUsername);
-      }
       this.sortArticles();
     });
   }

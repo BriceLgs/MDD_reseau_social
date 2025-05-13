@@ -40,7 +40,7 @@ public class User {
     @Column(name = "date_creation")
     private LocalDateTime dateCreation;
 
-    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Article> articles = new ArrayList<>();
 
