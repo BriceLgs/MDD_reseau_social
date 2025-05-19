@@ -55,7 +55,6 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<?> createComment(@RequestBody Map<String, Object> payload) {
         try {
-            // Récupération de l'utilisateur authentifié
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null || !authentication.isAuthenticated() || 
                 !(authentication.getPrincipal() instanceof UserDetails)) {
@@ -64,8 +63,6 @@ public class CommentController {
                 errorResponse.put("error", "Vous devez être connecté pour commenter");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
-            
-            // Récupération de l'ID de l'utilisateur depuis le token JWT
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername();
             Long userId = userService.getUserIdByEmail(email);
@@ -77,7 +74,6 @@ public class CommentController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
             
-            // Extraction des données du payload
             String content = (String) payload.get("content");
             Number articleIdNumber = (Number) payload.get("articleId");
             
@@ -105,7 +101,6 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
         try {
-            // Récupération de l'utilisateur authentifié
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null || !authentication.isAuthenticated() || 
                 !(authentication.getPrincipal() instanceof UserDetails)) {
@@ -114,8 +109,6 @@ public class CommentController {
                 errorResponse.put("error", "Vous devez être connecté pour supprimer un commentaire");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
-            
-            // Récupération de l'ID de l'utilisateur depuis le token JWT
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername();
             Long userId = userService.getUserIdByEmail(email);
@@ -142,7 +135,6 @@ public class CommentController {
     @GetMapping("/user")
     public ResponseEntity<?> getCommentsByCurrentUser() {
         try {
-            // Récupération de l'utilisateur authentifié
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null || !authentication.isAuthenticated() || 
                 !(authentication.getPrincipal() instanceof UserDetails)) {
@@ -152,7 +144,6 @@ public class CommentController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
             
-            // Récupération de l'ID de l'utilisateur depuis le token JWT
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername();
             Long userId = userService.getUserIdByEmail(email);

@@ -29,7 +29,7 @@ Le projet est divisé en deux parties principales :
 
 ### Base de données
 
-1. Créez une base de données MySQL nommée `devblog`
+1. Créez une base de données MySQL nommée `mddapi`
 2. Configurez les informations de connexion dans `back/src/main/resources/application.properties`
 
 ### Backend (Spring Boot)

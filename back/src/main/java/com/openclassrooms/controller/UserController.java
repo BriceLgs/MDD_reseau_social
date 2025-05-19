@@ -55,21 +55,15 @@ public class UserController {
             }
 
             try {
-                // Authentification via Spring Security
                 Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email.trim(), password)
                 );
-                
-                // Si l'authentification réussit, on récupère l'utilisateur
                 Optional<User> userOpt = userService.getUserByEmail(email.trim());
                 
                 if (userOpt.isPresent()) {
                     User user = userOpt.get();
                     
-                    // Génération du token JWT
                     String token = jwtTokenProvider.createToken(user.getEmail(), user.getId());
-                    
-                    // Création de la réponse
                     Map<String, Object> response = new HashMap<>();
                     response.put("id", user.getId());
                     response.put("username", user.getUsername());
@@ -113,8 +107,7 @@ public class UserController {
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword() != null ? "***" : "null");
-            
-            // Vérification des champs requis
+    
             boolean usernameEmpty = user.getUsername() == null || user.getUsername().trim().isEmpty();
             boolean emailEmpty = user.getEmail() == null || user.getEmail().trim().isEmpty();
             boolean passwordEmpty = user.getPassword() == null || user.getPassword().trim().isEmpty();
@@ -139,15 +132,10 @@ public class UserController {
                 
                 return ResponseEntity.badRequest().body(response);
             }
-            
-            // Nettoyage des données
             user.setUsername(user.getUsername().trim());
             user.setEmail(user.getEmail().trim());
-            
-            // Encodage du mot de passe
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            
-            // Vérifications d'unicité
+    
             if (userService.getUserByEmail(user.getEmail()).isPresent()) {
                 logger.warn("Tentative d'inscription avec un email déjà utilisé: {}", user.getEmail());
                 Map<String, String> response = new HashMap<>();
@@ -161,8 +149,6 @@ public class UserController {
                 response.put("message", "Ce nom d'utilisateur est déjà utilisé");
                 return ResponseEntity.badRequest().body(response);
             }
-
-            // Création de l'utilisateur
             User createdUser = userService.createUser(user);
             logger.info("Inscription réussie pour l'utilisateur: {}", createdUser.getUsername());
             
@@ -198,8 +184,6 @@ public class UserController {
             return ResponseEntity.status(500).body(response);
         }
     }
-
-    // Endpoint de test pour créer un utilisateur par défaut
     @GetMapping("/test/create-default-user")
     public ResponseEntity<?> createDefaultUser() {
         try {
@@ -228,7 +212,7 @@ public class UserController {
             userMap.put("id", user.getId());
             userMap.put("username", user.getUsername());
             userMap.put("email", user.getEmail());
-            userMap.put("password", "password123"); // Uniquement pour le test
+            userMap.put("password", "password123");
             
             response.put("user", userMap);
             
@@ -266,7 +250,6 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
-            // Encodage du mot de passe
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User createdUser = userService.createUser(user);
             return ResponseEntity.ok(createdUser);
@@ -278,7 +261,6 @@ public class UserController {
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         try {
-            // Si un nouveau mot de passe est fourni, on l'encode
             if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
                 userDetails.setPassword(passwordEncoder.encode(userDetails.getPassword()));
             }

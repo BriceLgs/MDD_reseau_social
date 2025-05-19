@@ -39,11 +39,11 @@ public class SubscriptionService {
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec ID: " + userId));
             logger.info("Utilisateur trouvé: {}", user);
             
-            // Recherche via le repository standard
+            
             List<Subscription> subscriptions = subscriptionRepository.findByUser(user);
             logger.info("Abonnements trouvés via repository (nombre): {}", subscriptions.size());
             
-            // Tentative de recherche directe avec SQL natif
+            
             try {
                 String sql = "SELECT * FROM subscriptions WHERE user_id = :userId";
                 List<?> resultList = entityManager.createNativeQuery(sql, Subscription.class)
@@ -54,7 +54,7 @@ public class SubscriptionService {
                 
                 if (resultList.size() > 0 && subscriptions.isEmpty()) {
                     logger.warn("Incohérence détectée: SQL natif trouve des abonnements mais le repository non");
-                    // Dans ce cas, essayons d'utiliser les résultats SQL
+                   
                     @SuppressWarnings("unchecked")
                     List<Subscription> sqlSubscriptions = (List<Subscription>) resultList;
                     subscriptions = sqlSubscriptions;
@@ -63,7 +63,7 @@ public class SubscriptionService {
                 logger.error("Erreur lors de la requête SQL native: {}", e.getMessage(), e);
             }
             
-            // Logging détaillé de chaque abonnement
+            
             if (!subscriptions.isEmpty()) {
                 logger.info("Détails des abonnements:");
                 for (Subscription sub : subscriptions) {
@@ -77,7 +77,7 @@ public class SubscriptionService {
             } else {
                 logger.warn("Aucun abonnement trouvé pour l'utilisateur {}", userId);
                 
-                // Vérifier si des abonnements existent dans la base de données
+                
                 long count = subscriptionRepository.count();
                 logger.info("Nombre total d'abonnements dans la base: {}", count);
                 
@@ -161,9 +161,7 @@ public class SubscriptionService {
         }
     }
 
-    /**
-     * Récupère tous les abonnements de la base de données (pour débogage)
-     */
+    
     public List<Subscription> getAllSubscriptions() {
         try {
             logger.info("Récupération de tous les abonnements");

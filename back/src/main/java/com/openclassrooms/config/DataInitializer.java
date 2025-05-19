@@ -27,7 +27,6 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Initialiser les thèmes seulement si la table est vide
         if (themeRepository.count() == 0) {
             List<Theme> themesDefaut = Arrays.asList(
                 createTheme("Angular", "Framework JavaScript pour le développement d'applications web"),
@@ -42,7 +41,6 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Thèmes par défaut ajoutés avec succès");
         }
         
-        // Initialiser un utilisateur par défaut si la table est vide
         if (userRepository.count() == 0) {
             User defaultUser = new User();
             defaultUser.setUsername("user1");
@@ -54,10 +52,9 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Utilisateur par défaut ajouté avec succès");
         }
         
-        // Mettre à jour les mots de passe non encodés des utilisateurs existants
+    
         List<User> users = userRepository.findAll();
         for (User user : users) {
-            // Vérifier si le mot de passe est déjà encodé (commence généralement par $2a$)
             if (!user.getPassword().startsWith("$2a$")) {
                 System.out.println("Mise à jour du mot de passe non encodé pour l'utilisateur: " + user.getUsername());
                 user.setPassword(passwordEncoder.encode(user.getPassword()));

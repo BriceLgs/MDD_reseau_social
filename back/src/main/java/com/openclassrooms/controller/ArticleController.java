@@ -75,14 +75,13 @@ public class ArticleController {
         try {
             logger.info("=== DÉBUT REQUÊTE CRÉATION ARTICLE ===");
             
-            // quel themId utiliser
             Long finalThemeId = themeId;
             if (finalThemeId == null && articleDto.getThemeId() != null) {
                 finalThemeId = articleDto.getThemeId();
                 logger.info("Utilisation du themeId depuis le DTO: {}", finalThemeId);
             }
             
-            //  pour themeId
+           
             if (finalThemeId == null) {
                 logger.error("Le themeId est manquant (absent dans les paramètres et dans le DTO)");
                 Map<String, String> errorResponse = new HashMap<>();
@@ -120,7 +119,6 @@ public class ArticleController {
             article.setContent(articleDto.getContent());
             article.setStatus(ArticleStatus.DRAFT);
             
-            // Création directe de l'article avec son thème
             try {
                 Article createdArticle = articleService.createArticle(article, userId, finalThemeId);
                 return ResponseEntity.ok(createdArticle);

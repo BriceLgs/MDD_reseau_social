@@ -97,11 +97,6 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    /**
-     * Récupère l'ID d'un utilisateur à partir de son email
-     * @param email Email de l'utilisateur
-     * @return ID de l'utilisateur ou null si non trouvé
-     */
     public Long getUserIdByEmail(String email) {
         return userRepository.findByEmail(email)
                 .map(User::getId)

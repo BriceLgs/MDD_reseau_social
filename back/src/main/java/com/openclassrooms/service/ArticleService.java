@@ -56,15 +56,12 @@ public class ArticleService {
     @Transactional
     public Article createArticle(Article article, Long userId, Long themeId) {
         try {
-            // Récupération de l'utilisateur
             User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec ID: " + userId));
-            
-            // Récupération du thème
             Theme theme = themeRepository.findById(themeId)
                 .orElseThrow(() -> new RuntimeException("Thème non trouvé avec ID: " + themeId));
             
-            // Validation des champs obligatoires
+
             if (article.getTitle() == null || article.getTitle().trim().isEmpty()) {
                 throw new RuntimeException("Le titre de l'article ne peut pas être vide");
             }
@@ -73,20 +70,18 @@ public class ArticleService {
                 throw new RuntimeException("Le contenu de l'article ne peut pas être vide");
             }
             
-            // Création d'un nouvel article
+            
             Article newArticle = new Article();
-            newArticle.setTitle(article.getTitle().trim());
+             newArticle.setTitle(article.getTitle().trim());
             newArticle.setContent(article.getContent().trim());
             newArticle.setAuthor(user);
             newArticle.setTheme(theme);
-            
-            // Important : définir explicitement le nom du thème (colonne "theme")
+        
             newArticle.setThemeName(theme.getName());
             
             newArticle.setDateCreation(LocalDateTime.now());
             newArticle.setStatus(article.getStatus() != null ? article.getStatus() : ArticleStatus.DRAFT);
-            
-            // Sauvegarde
+
             return articleRepository.save(newArticle);
         } catch (Exception e) {
             logger.error("Erreur lors de la création de l'article:", e);
@@ -118,12 +113,6 @@ public class ArticleService {
                 .orElseThrow(() -> new RuntimeException("Article non trouvé avec l'ID: " + id));
         articleRepository.delete(article);
     }
-    
-    /**
-     * Récupère l'ID d'un utilisateur à partir de son email
-     * @param email Email de l'utilisateur
-     * @return ID de l'utilisateur ou null si non trouvé
-     */
     public Long getUserIdByEmail(String email) {
         return userRepository.findByEmail(email)
                 .map(User::getId)

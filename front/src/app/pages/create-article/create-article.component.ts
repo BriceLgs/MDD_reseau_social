@@ -34,7 +34,6 @@ export class CreateArticleComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadThemes();
-    // Vérifier que l'utilisateur est connecté
     if (!this.authService.isAuthenticated()) {
       console.warn('Utilisateur non authentifié, redirection vers la page de connexion');
       this.router.navigate(['/login']);
@@ -73,7 +72,6 @@ export class CreateArticleComponent implements OnInit {
         return;
       }
       
-      // Vérifier les validateurs manuellement
       if (formData.title.trim().length < 3) {
         this.error = 'Le titre doit contenir au moins 3 caractères';
         this.isSubmitting = false;
@@ -119,7 +117,6 @@ export class CreateArticleComponent implements OnInit {
         }
       });
     } else {
-      // Afficher les erreurs de validation si le formulaire est invalide
       if (this.articleForm.get('themeId')?.hasError('required')) {
         this.error = 'Veuillez sélectionner un thème';
       } else if (this.articleForm.get('title')?.hasError('required')) {
