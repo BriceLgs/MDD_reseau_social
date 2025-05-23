@@ -3,5 +3,4 @@ export interface Theme {
     name: string;
     description: string;
     dateCreation: string;
-    articleCount?: number;
 } 

@@ -53,7 +53,7 @@ public class UserController {
                 response.put("message", "Email et mot de passe requis");
                 return ResponseEntity.badRequest().body(response);
             }
-
+// -->
             try {
                 Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email.trim(), password)

@@ -40,7 +40,7 @@ public class SubscriptionController {
     @GetMapping("/user")
     public ResponseEntity<?> getCurrentUserSubscriptions() {
         try {
-            // Récupération de l'utilisateur authentifié
+            
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null || !authentication.isAuthenticated() || 
                 !(authentication.getPrincipal() instanceof UserDetails)) {
@@ -50,7 +50,7 @@ public class SubscriptionController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
             
-            // Récupération de l'ID de l'utilisateur depuis le token JWT
+            
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername();
             Long userId = userService.getUserIdByEmail(email);
@@ -65,7 +65,7 @@ public class SubscriptionController {
             logger.info("Récupération des abonnements pour l'utilisateur: {}", userId);
             List<Subscription> subscriptions = subscriptionService.getUserSubscriptions(userId);
             
-            // Convertir les entités en DTOs
+            
             List<SubscriptionDto> subscriptionDtos = subscriptions.stream()
                 .map(SubscriptionDto::fromEntity)
                 .collect(Collectors.toList());
@@ -81,7 +81,7 @@ public class SubscriptionController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getUserSubscriptions(@PathVariable Long userId) {
         try {
-            // Vérification que l'utilisateur est authentifié
+            
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null || !authentication.isAuthenticated()) {
                 logger.error("Tentative d'accès aux abonnements sans authentification valide");
@@ -93,7 +93,7 @@ public class SubscriptionController {
             logger.info("Récupération des abonnements pour l'utilisateur: {}", userId);
             List<Subscription> subscriptions = subscriptionService.getUserSubscriptions(userId);
             
-            // Convertir les entités en DTOs
+            
             List<SubscriptionDto> subscriptionDtos = subscriptions.stream()
                 .map(SubscriptionDto::fromEntity)
                 .collect(Collectors.toList());
@@ -109,7 +109,7 @@ public class SubscriptionController {
     @PostMapping("/subscribe")
     public ResponseEntity<?> subscribeToTheme(@RequestParam Long themeId) {
         try {
-            // Récupération de l'utilisateur authentifié
+            
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null || !authentication.isAuthenticated() || 
                 !(authentication.getPrincipal() instanceof UserDetails)) {
@@ -119,7 +119,7 @@ public class SubscriptionController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
             
-            // Récupération de l'ID de l'utilisateur depuis le token JWT
+            
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername();
             Long userId = userService.getUserIdByEmail(email);
@@ -148,7 +148,7 @@ public class SubscriptionController {
     @DeleteMapping("/unsubscribe")
     public ResponseEntity<?> unsubscribeFromTheme(@RequestParam Long themeId) {
         try {
-            // Récupération de l'utilisateur authentifié
+            
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null || !authentication.isAuthenticated() || 
                 !(authentication.getPrincipal() instanceof UserDetails)) {
@@ -158,7 +158,7 @@ public class SubscriptionController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
             
-            // Récupération de l'ID de l'utilisateur depuis le token JWT
+            
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername();
             Long userId = userService.getUserIdByEmail(email);
@@ -221,10 +221,10 @@ public class SubscriptionController {
         try {
             logger.info("Vérification de la structure de la table subscriptions");
             
-            // Utiliser une approche compatible avec tous les moteurs de base de données
+            
             Map<String, Object> result = new HashMap<>();
             
-            // Récupérer les métadonnées des colonnes via JPA
+            
             List<Map<String, String>> columns = new ArrayList<>();
             Map<String, String> idColumn = new HashMap<>();
             idColumn.put("Field", "id");
@@ -251,7 +251,7 @@ public class SubscriptionController {
             
             result.put("columns", columns);
             
-            // Récupérer quelques données d'exemple
+           
             List<Subscription> subscriptions = subscriptionService.getAllSubscriptions().subList(0, 
                 Math.min(subscriptionService.getAllSubscriptions().size(), 5));
             

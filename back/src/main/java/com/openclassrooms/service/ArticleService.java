@@ -93,17 +93,6 @@ public class ArticleService {
     public Article updateArticle(Long id, Article articleDetails) {
         Article article = articleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Article non trouvé avec l'ID: " + id));
-
-        if (articleDetails.getTitle() != null) {
-            article.setTitle(articleDetails.getTitle());
-        }
-        if (articleDetails.getContent() != null) {
-            article.setContent(articleDetails.getContent());
-        }
-        if (articleDetails.getStatus() != null) {
-            article.setStatus(articleDetails.getStatus());
-        }
-
         return articleRepository.save(article);
     }
 

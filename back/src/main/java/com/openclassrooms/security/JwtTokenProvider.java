@@ -26,7 +26,7 @@ public class JwtTokenProvider {
 
     @Autowired
     private UserDetailsService userDetailsService;
-
+// -->
     public String createToken(String username, Long userId) {
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("userId", userId);

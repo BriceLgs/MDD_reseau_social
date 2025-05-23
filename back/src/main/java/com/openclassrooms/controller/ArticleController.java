@@ -114,11 +114,7 @@ public class ArticleController {
             logger.info("Création d'article par l'utilisateur: {}", userId);
             
            
-            Article article = new Article();
-            article.setTitle(articleDto.getTitle());
-            article.setContent(articleDto.getContent());
-            article.setStatus(ArticleStatus.DRAFT);
-            
+            Article article = Article.builder().title(articleDto.getTitle()).content(articleDto.getContent()).status(ArticleStatus.DRAFT).build();
             try {
                 Article createdArticle = articleService.createArticle(article, userId, finalThemeId);
                 return ResponseEntity.ok(createdArticle);

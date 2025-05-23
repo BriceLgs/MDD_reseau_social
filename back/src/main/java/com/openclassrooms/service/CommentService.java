@@ -60,7 +60,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
             .orElseThrow(() -> new RuntimeException("Commentaire non trouvé avec ID: " + commentId));
         
-        // Vérifier que l'utilisateur est l'auteur du commentaire
+        
         if (!comment.getAuthor().getId().equals(userId)) {
             throw new RuntimeException("Vous n'êtes pas autorisé à supprimer ce commentaire");
         }

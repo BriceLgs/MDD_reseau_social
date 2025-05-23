@@ -1,4 +1,4 @@
-<!-- Navbar pour les pages authentifiées -->
+<!-- Navbar pour les pages authentifier -->
 <nav class="navbar" *ngIf="authService.isAuthenticated() && !isHomePage() && !isAuthPage()">
   <img class="logo" src="assets/logo_p6.png" alt="MDD Logo">
   
@@ -19,16 +19,16 @@
   </button>
 
   <div class="mobile-menu" [class.show]="isMobileMenuOpen">
+    <button mat-button (click)="logout()" class="logout-btn">Se déconnecter</button>
     <a routerLink="/articles" routerLinkActive="active" class="nav-link">Articles</a>
     <a routerLink="/themes" routerLinkActive="active" class="nav-link">Thèmes</a>
-    <button mat-button (click)="logout()" class="logout-btn">Se déconnecter</button>
     <button mat-icon-button class="profile-btn" routerLink="/me">
       <mat-icon>account_circle</mat-icon>
     </button>
   </div>
 </nav>
 
-<!-- Navbar simplifiée pour les pages de connexion/inscription -->
+<!-- Navbar simplifier pour les pages de connexion/inscription -->
 <nav class="navbar" [class.register-page-navbar]="router.url === '/register' || router.url === '/login'" *ngIf="isAuthPage()">
   <img class="logo" src="assets/logo_p6.png" alt="MDD Logo">
 </nav>

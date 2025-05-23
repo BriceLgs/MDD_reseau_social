@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 @Injectable({
     providedIn: 'root'
 })
+// -->
 export class AuthService {
     private currentUserSubject = new BehaviorSubject<any>(null);
     public currentUser$ = this.currentUserSubject.asObservable();
